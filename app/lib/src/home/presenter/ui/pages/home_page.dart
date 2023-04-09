@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:listinha/src/home/presenter/ui/moleculs/custom_drawer.dart';
+import 'package:listinha/src/home/presenter/ui/moleculs/task_card.dart';
+import 'package:listinha/src/shared/services/realm/models/task_board_model.dart';
 import 'package:listinha/src/shared/widgets/user_image_button.dart';
+import 'package:realm/realm.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,8 +29,30 @@ class HomePage extends StatelessWidget {
         },
       ),
       body: Center(
-        child: Column(
+        child: Stack(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 70, left: 30, right: 30),
+              child: ListView.separated(
+                itemBuilder: (_, index) {
+                  final board = TaskBoard(
+                    Uuid.v4(),
+                    'Nova lista',
+                    task: [
+                      Task(Uuid.v4(), '', complete: true),
+                      Task(Uuid.v4(), '', complete: true),
+                      Task(Uuid.v4(), '', complete: true),
+                      Task(Uuid.v4(), '', complete: true),
+                    ],
+                  );
+                  return TaskCard(
+                    board: board,
+                  );
+                },
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemCount: 100,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8),
               child: SegmentedButton<int>(
@@ -52,7 +77,7 @@ class HomePage extends StatelessWidget {
                 onSelectionChanged: (value) {},
                 selected: const {3},
               ),
-            )
+            ),
           ],
         ),
       ),
